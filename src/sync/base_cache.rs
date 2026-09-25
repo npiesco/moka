@@ -30,10 +30,10 @@ use crate::{
     Entry, Expiry, Policy, PredicateError,
 };
 
+use crate::common::concurrent::lock::{Mutex, RwLock};
 use crossbeam_channel::{Receiver, Sender, TrySendError};
 use crossbeam_utils::atomic::AtomicCell;
 use equivalent::Equivalent;
-use parking_lot::{Mutex, RwLock};
 use smallvec::SmallVec;
 use std::{
     borrow::Borrow,

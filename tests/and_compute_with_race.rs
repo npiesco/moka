@@ -1,4 +1,4 @@
-#![cfg(feature = "future")]
+#![cfg(all(feature = "future", not(target_family = "wasm")))]
 
 /// Regression test for TOCTOU race in `and_compute_with`.
 ///

@@ -1,4 +1,4 @@
-#![cfg(all(test, feature = "future"))]
+#![cfg(all(test, feature = "future", not(target_family = "wasm")))]
 
 use std::sync::{
     atomic::{AtomicUsize, Ordering},

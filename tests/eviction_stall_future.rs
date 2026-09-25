@@ -1,4 +1,4 @@
-#![cfg(all(test, feature = "future"))]
+#![cfg(all(test, feature = "future", not(target_family = "wasm")))]
 
 use moka::{future::Cache, policy::EvictionPolicy};
 use std::sync::Arc;

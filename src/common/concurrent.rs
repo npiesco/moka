@@ -1,6 +1,6 @@
 use crate::common::{concurrent::arc::MiniArc, deque::DeqNode, time::Instant};
 
-use parking_lot::Mutex;
+use self::lock::Mutex;
 use std::{fmt, ptr::NonNull, sync::Arc};
 use tagptr::TagNonNull;
 
@@ -8,6 +8,7 @@ pub(crate) mod arc;
 pub(crate) mod constants;
 pub(crate) mod deques;
 pub(crate) mod entry_info;
+pub(crate) mod lock;
 
 #[cfg(feature = "sync")]
 pub(crate) mod housekeeper;

@@ -779,8 +779,8 @@ where
 #[cfg(test)]
 mod tests {
     use super::SegmentedCache;
+    use crate::common::concurrent::lock::Mutex;
     use crate::notification::RemovalCause;
-    use parking_lot::Mutex;
     use std::{error::Error, fmt::Display, sync::Arc, time::Duration};
 
     #[test]

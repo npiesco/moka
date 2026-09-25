@@ -4,7 +4,7 @@ use super::constants::{READ_LOG_FLUSH_POINT, WRITE_LOG_FLUSH_POINT};
 use crate::common::time::{AtomicInstant, Instant};
 use crate::common::HousekeeperConfig;
 
-use parking_lot::{Mutex, MutexGuard};
+use crate::common::concurrent::lock::{Mutex, MutexGuard};
 use std::{
     sync::atomic::{AtomicBool, Ordering},
     time::Duration,

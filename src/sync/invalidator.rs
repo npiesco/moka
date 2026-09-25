@@ -8,7 +8,7 @@ use crate::{
     PredicateError,
 };
 
-use parking_lot::{Mutex, MutexGuard};
+use crate::common::concurrent::lock::{Mutex, MutexGuard};
 use std::{
     hash::{BuildHasher, Hash},
     sync::{

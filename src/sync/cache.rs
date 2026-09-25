@@ -1887,7 +1887,7 @@ mod tests {
         Expiry,
     };
 
-    use parking_lot::Mutex;
+    use crate::common::concurrent::lock::Mutex;
     use std::{
         convert::Infallible,
         sync::{
