@@ -13,8 +13,8 @@ set -eux
 # `reqwest` v0.12's dependency tree pulls in many edition-2024 crates (`zeroize`
 # v1.9, the `rand` v0.10 stack, `idna_adapter`, ...). v0.11 uses an older,
 # edition-2021 tree.
-cargo remove --dev reqwest
-cargo add --dev reqwest@0.11.11 --no-default-features --features rustls-tls
+cargo remove --dev --target 'cfg(not(target_family = "wasm"))' reqwest
+cargo add --dev --target 'cfg(not(target_family = "wasm"))' reqwest@0.11.11 --no-default-features --features rustls-tls
 
 # Pin some dependencies to specific versions for the nightly toolchain
 # used by Kani verifier.
