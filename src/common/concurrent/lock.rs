@@ -2,21 +2,24 @@
 //!
 //! On most targets, these are re-exports of `parking_lot` types.
 //!
-//! On WebAssembly targets, `parking_lot` (without its `nightly` feature) cannot
-//! park a thread and panics when a lock is contended, which happens on
-//! multi-threaded wasm such as `wasm32-wasip1-threads`. So on wasm we provide
-//! thin wrappers around `std::sync` locks that mimic the subset of the
-//! `parking_lot` API used by this crate (no lock poisoning, `try_lock` returns
-//! an `Option`).
+//! On WebAssembly targets and under Miri, we instead provide thin wrappers around
+//! `std::sync` locks that mimic the subset of the `parking_lot` API used by this
+//! crate (no lock poisoning, `try_lock` returns an `Option`):
+//!
+//! - On wasm, `parking_lot` (without its `nightly` feature) cannot park a thread
+//!   and panics when a lock is contended, which happens on multi-threaded wasm
+//!   such as `wasm32-wasip1-threads`.
+//! - Under Miri, `parking_lot_core`'s Linux thread parker calls the `futex`
+//!   syscall with an argument type that Miri reports as Undefined Behavior.
 
-#[cfg(not(target_family = "wasm"))]
+#[cfg(not(any(target_family = "wasm", miri)))]
 pub(crate) use parking_lot::{Mutex, MutexGuard, RwLock};
 
-#[cfg(target_family = "wasm")]
-pub(crate) use self::wasm::{Mutex, MutexGuard, RwLock};
+#[cfg(any(target_family = "wasm", miri))]
+pub(crate) use self::std_sync::{Mutex, MutexGuard, RwLock};
 
-#[cfg(target_family = "wasm")]
-mod wasm {
+#[cfg(any(target_family = "wasm", miri))]
+mod std_sync {
     use std::sync::{self, PoisonError, TryLockError};
 
     pub(crate) type MutexGuard<'a, T> = sync::MutexGuard<'a, T>;

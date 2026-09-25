@@ -9,6 +9,8 @@ cargo add --dev --target 'cfg(not(target_family = "wasm"))' reqwest@0.11.11 --no
 # Pin some dependencies to specific versions for the MSRV.
 cargo update -p url --precise 2.5.2
 cargo update -p actix-rt --precise 2.10.0
+# `actix-macros` v0.2.5 requires Rust 1.88.
+cargo update -p actix-macros --precise 0.2.4
 cargo update -p tokio --precise 1.47.1
 cargo update -p tokio-rustls --precise 0.24.1
 cargo update -p tokio-util --precise 0.7.16
@@ -29,3 +31,9 @@ cargo update -p parking_lot_core --precise 0.9.11
 cargo update -p lock_api --precise 0.4.13
 cargo update -p async-lock --precise 3.4.1
 cargo update -p uuid --precise 1.20.0
+# `wasip2` v1.0.2+ (pulled in by `getrandom` v0.3) depends on an edition-2024
+# `wit-bindgen`, and `encoding_rs` v0.8.36+ (pulled in by `reqwest`) is edition
+# 2024. Cargo 1.71.1 cannot parse edition-2024 manifests, even for dependencies
+# that are only used on other targets.
+cargo update -p wasip2 --precise 1.0.1+wasi-0.2.4
+cargo update -p encoding_rs --precise 0.8.35
