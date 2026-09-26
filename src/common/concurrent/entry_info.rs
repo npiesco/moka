@@ -361,11 +361,13 @@ mod tests {
 
     #[test]
     #[cfg(debug_assertions)]
-    #[should_panic(expected = "retire() called on already-retired entry")]
     fn lifecycle_double_retire_debug() {
         let info = make_entry_info();
         info.retire();
         // Second retire violates the exclusive-call invariant; debug-asserted.
-        info.retire();
+        crate::common::test_utils::assert_panics_with(
+            || info.retire(),
+            "retire() called on already-retired entry",
+        );
     }
 }

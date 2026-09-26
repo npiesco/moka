@@ -79,3 +79,21 @@ impl Drop for Value {
         self.counters.incl_value_dropped();
     }
 }
+
+/// Runs `f` and asserts that it panics with a message containing `expected`.
+///
+/// Use this instead of `#[should_panic]`, which libtest ignores on wasm targets
+/// even when they are built with `panic = "unwind"`.
+pub(crate) fn assert_panics_with<F: FnOnce()>(f: F, expected: &str) {
+    let payload =
+        std::panic::catch_unwind(std::panic::AssertUnwindSafe(f)).expect_err("expected a panic");
+    let message = payload
+        .downcast_ref::<String>()
+        .map(String::as_str)
+        .or_else(|| payload.downcast_ref::<&str>().copied())
+        .expect("panic payload is not a string");
+    assert!(
+        message.contains(expected),
+        "panic message {message:?} does not contain {expected:?}"
+    );
+}
