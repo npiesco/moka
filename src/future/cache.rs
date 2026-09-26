@@ -3362,9 +3362,14 @@ mod tests {
             format!("val: {key}")
         }
 
+        // Use a mock clock that never advances. With the real clock, entries that
+        // are not touched for 10 seconds expire by time-to-idle and are skipped by
+        // the iterators, so the test fails on slow machines (e.g. emulated targets).
+        let (clock, _mock) = Clock::mock();
         let cache = Cache::builder()
             .max_capacity(100)
             .time_to_idle(Duration::from_secs(10))
+            .clock(clock)
             .build();
 
         for key in 0..NUM_KEYS {
@@ -3399,9 +3404,14 @@ mod tests {
             format!("val: {key}")
         }
 
+        // Use a mock clock that never advances. With the real clock, entries that
+        // are not touched for 10 seconds expire by time-to-idle and are skipped by
+        // the iterators, so the test fails on slow machines (e.g. emulated targets).
+        let (clock, _mock) = Clock::mock();
         let cache = Cache::builder()
             .max_capacity(2048)
             .time_to_idle(Duration::from_secs(10))
+            .clock(clock)
             .build();
 
         // Initialize the cache.
